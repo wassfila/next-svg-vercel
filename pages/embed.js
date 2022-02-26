@@ -9,7 +9,7 @@ export default function PanZoom() {
   return (
     <>
       <Head>
-      <title>Pan Zoom</title>
+      <title>Embed</title>
       <link rel="icon" href="/favicon.ico" />
       </Head>
       {svg_list.map((file,index)=>
