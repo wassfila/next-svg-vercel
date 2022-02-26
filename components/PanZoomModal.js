@@ -1,9 +1,9 @@
 import React, { useRef, useState, useCallback } from 'react';
 import panzoom from 'panzoom';
-import { Modal,Box } from '@mui/material';
+import { Modal,Box, Button,Stack } from '@mui/material';
 import * as utl from './svg_utils'
-
 import SVG from 'react-inlinesvg';
+import CloseIcon from '@mui/icons-material/Close';
 
 const style = {
   position: 'absolute',
@@ -20,14 +20,35 @@ const style = {
   cursor: 'grab'
 };
 
+const buttonActiveStyle = {
+  zIndex: 'modal',
+  color:'#0036bb',
+  backgroundColor:'#ffffff',
+  position: 'absolute',
+  right: '3%',
+  top:'3%'
+}
+
+const buttonRestStyle = {
+  zIndex: 'modal',
+  color:'#0036bb55',
+  backgroundColor:'#ffffff55',
+  '&:hover':{color:'#0036bb',backgroundColor:'#ffffff'},
+  position: 'absolute',
+  right: '3%',
+  top:'3%'
+}
+
 export default function PanZoom({src,open,handleClose}) {
   const started = useRef(false)
   const [loaded, setLoaded] = useState(false)
+  const [buttonActive, setButtonActive] = useState(true)
   
   const zoomOptions = {minZoom: 0.1, maxZoom:4}
   const panzoomRef = useRef(null)
   const boxRef = useRef(null);
-  const divRef = useRef(null)
+  const divRef = useRef(null);
+  const buttonRef = useRef(null);
 
   const divMeasure = useCallback(node=>{
     divRef.current = node
@@ -43,6 +64,8 @@ export default function PanZoom({src,open,handleClose}) {
     if((divRef.current != null) && (boxRef.current != null) && (loaded) && (!started.current)){
       panzoomRef.current = panzoom(divRef.current, zoomOptions);
       started.current=true
+      setButtonActive(true)
+      setTimeout(()=>{setButtonActive(false)},2000)
       let svg = divRef.current.getElementsByTagName('svg')[0]
       if(svg){
         utl.Fit(panzoomRef.current,divRef.current,boxRef.current)
@@ -74,10 +97,14 @@ export default function PanZoom({src,open,handleClose}) {
       aria-describedby="modal-modal-description"
     >
       <Box ref={boxMeasure} sx={style} >
+      <Button ref={buttonRef} onClick={()=>{stopPZ();handleClose();}}
+              variant="conained"
+              sx={buttonActive?buttonActiveStyle:buttonRestStyle}
+                ><CloseIcon/></Button>
         <div ref={divMeasure}>
           <SVG src={src} onLoad={()=>{setLoaded(true)}}/>
         </div>
-      </Box>
+        </Box>
     </Modal>
   )
 }
