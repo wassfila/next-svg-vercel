@@ -21,6 +21,9 @@ svg pan zoom as a react component on next js with adjustment buttons and Modal
 * mouse leave cannot be used to deactivate the panzoom due to the activation limitation orresetting the image position
 
 ## TODOs
+* X for deactivation on main and on Modal
+* hints for pan zoom on mouse enter
+* top on svg with `width=800px` not working
 * handle images not SVGs only
 
 ## Limitations

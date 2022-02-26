@@ -80,12 +80,12 @@ export default function PanZoom({src}) {
         <Button onClick={()=>{onMouseDown();utl.Top(panzoomRef.current,divRef.current,boxRef.current)}}
                 variant="contained">Top</Button>
         <Button onClick={(e)=>{stopPZ();setActive(false)}}
-                variant="contained">Stop</Button>
+                variant="contained">Deactivate</Button>
         <Button onClick={TestSVGjs} variant="contained">Test SVG.js</Button>
         <Button onClick={()=>{setOpen(true)}} variant="contained">Open modal</Button>
     </Stack>
-    <Box id="mainContent" m={1} sx={{border: active?'1px solid':'0px', cursor:active?'grab':'default' }}>
-        <Paper elevation={active?5:2}>
+    <Box id="mainContent" m={1} sx={{border: active?'2px solid':'0px', cursor:'grab'}}>
+        <Paper elevation={active?10:2}>
             <Box ref={boxRef} 
                  sx={{  height:boxHeight, overflow: 'hidden'}}>
                 <div ref={divRef} >
