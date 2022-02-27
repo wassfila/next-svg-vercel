@@ -4,32 +4,36 @@ svg pan zoom as a react component on next js with adjustment buttons and Modal
 # Spec
 * svg loaded dynamically from json input filenames
 * panzoom object is disabled by default to allow window wheel vertical scroll
-* panzoom activated only after first mouse down on image or adjutment buttons
-* activation is show with Box higher shadow and border solid style
-* cursor `grab` is shown when panzoom is active
-* fit button allow to adjust the image in the viewing area, fitting width or height depending on the ratio
+* cursor `grab` is always shown over the images to show the interaction possibility
+* panzoom is only activated on user interaction after first mouse down
 * first mouse down can be continued to pan the image
-* stop button can deactivate the panzoom to gain vertical scroll ability again
-* a new reactivation after stop will reset the position
-* open Modal button open a full window Modal fitted image with active panzoom
-* Modal is not 100% on width and height but a small percentage of darkened are is left to click on and exit from the modal
-* Keyboard escape key also allows to close the modal
+* activation is show with a focus effect using a Paper with higher shadow and border solid style
+* focus is lost from `focusout` event and deactivates the panzoom leaving the images in its position
+* loss of focus and deactivation allows the user to use the wheel mouse for vertical scrolling again
+* fit button allow to adjust the image in the viewing area, fitting width or height depending on the ratio
+* a new reactivation after stop will reset the image position
+* Modal button open a full window Modal fitted image with active panzoom
+* Modal is not 100% on width and height but a small percentage of darkened are is left
+  * Modal exit with click away ondark area
+  * Modal exit with X button that fades a bit after 2
+  * Modal exit with keyboard key
 
 ## decisions
 * it is accepted to rely on javascript dynamic loading of svg instead of the `embed` or `object` due to the limitation of panzoom lib of not acting on shadow svg documents
 * it is accepted that images are not adjusted by default and css styling and svg properties are used to define the default adjustment e.g. without `width=900px`
-* mouse leave cannot be used to deactivate the panzoom due to the activation limitation orresetting the image position
+* mouse leave cannot be used to deactivate the panzoom due to the activation limitation orresetting the image
+* an alert popover hint about the possibility of panzoom in addition to the grab cursor is not necessary and might be annoying to frequent users
 
 ## TODOs
-* X for deactivation on main and on Modal
-* hints for pan zoom on mouse enter
+* keep panzoom coordinate when regaining the focus
+* deep linking
 * top on svg with `width=800px` not working
 * handle images not SVGs only
 
 ## Limitations
 * in Chrome touch generates : "Intervention unable to preventdefault inside passive event"
-* cursor `grab` does not show on first mouse down and drag, only after release
 * timeout of 1 ms needed for second Modal open otherwise svg is undefined
+* focusout not reliable
 # Code description
 ## working sample
 * `inline.js` : using `panzoom` and `react-inlinesvg`.
@@ -63,3 +67,8 @@ svg pan zoom as a react component on next js with adjustment buttons and Modal
 * svg files without and with viwBox only will have responsive width
 * `svg.getBoundingClientRect();` does not react immediatly so that right after calls to `zoomAbs()` or `moveTo()` the returned value is the old one before the calls. One way to solve this is to avoid using it and precompute what the returned value is supposed to be depdning on if the top svg has a fixed width or fits to parent width
 
+# Credits
+* https://commons.wikimedia.org/wiki/File:Linux_kernel_map.svg
+* https://commons.wikimedia.org/wiki/File:Ghostscript_Tiger.svg
+* https://openclipart.org/detail/332727/vintage-flourish-divider-7
+* https://www.homesmartmesh.com/docs/microcontrollers/nrf52/thread_sensortag/#zephyr-tag-firmware

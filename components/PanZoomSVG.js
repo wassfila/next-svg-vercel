@@ -13,7 +13,7 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 
 export default function PanZoom({src}) {
   const started = useRef(false)
-  const [active, setActive] = useState(false)
+  const [focus, setFocus] = useState(false)
   const [loaded, setLoaded] = useState(false)
   const [open, setOpen] = useState(false);
 
@@ -24,15 +24,22 @@ export default function PanZoom({src}) {
   const panzoomRef = useRef(null);
   const stackRef = useRef(null);
 
+  function onFocusOut(){
+    stopPZ()
+    setFocus(false)
+    console.log("focus out")
+  }
   function onMouseDown(){
     startPZ()
-    setActive(true)
+    setFocus(true)
+    //window.setTimeout(()=>{boxRef.current.focus();console.log("focus")},50)
   }
   function onComponentUnmount(){
     stopPZ()
     //console.log("removing listener")//TODO not clear why this runs on startup before Mount ?
     if(divRef.current){
       boxRef.current.removeEventListener("mousedown",onMouseDown)
+      boxRef.current.removeEventListener("focusout", onFocusOut)
     }
   }
 
@@ -56,6 +63,7 @@ export default function PanZoom({src}) {
     if(loaded && divRef.current){
       //console.log("adding listener")
       boxRef.current.addEventListener("mousedown", onMouseDown,true)
+      boxRef.current.addEventListener("focusout", onFocusOut)
     }
     return onComponentUnmount
   }, [loaded]);
@@ -82,13 +90,11 @@ export default function PanZoom({src}) {
                 variant="text"><FitScreenIcon/> fit</Button>
         <Button onClick={()=>{onMouseDown();utl.Top(panzoomRef.current,divRef.current,boxRef.current)}}
                 variant="text"><ArrowUpwardIcon/></Button>
-        <Button onClick={(e)=>{stopPZ();setActive(false)}}
-                variant="text"><CloseIcon/></Button>
         <Button onClick={TestSVGjs} variant="text"><EditIcon/></Button>
         <Button onClick={()=>{setOpen(true)}} variant="text"><FullscreenIcon/></Button>
     </Stack>
-    <Box id="mainContent" m={1} sx={{border: active?'2px solid':'0px', cursor:'grab'}}>
-        <Paper elevation={active?10:2}>
+    <Box id="mainContent" m={1} sx={{border: focus?'2px solid':'0px',cursor:'grab'}}>
+      <Paper elevation={focus?10:2}>
             <Box ref={boxRef} 
                  sx={{  height:boxHeight, overflow: 'hidden'}}>
                 <div ref={divRef} >

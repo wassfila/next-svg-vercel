@@ -3,6 +3,7 @@ import PanZoomSVG from '../components/PanZoomSVG'
 import {useState} from 'react';
 
 const svg_list =[
+  'Linux_kernel_map.svg',
   'tiger2.svg',
   'tiger.svg',
   'vintage-flourish-divider-7.svg',

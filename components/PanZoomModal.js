@@ -15,7 +15,7 @@ const style = {
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
-  p: 4,
+  p: 2,
   overflow: 'hidden',
   cursor: 'grab'
 };
@@ -25,8 +25,8 @@ const buttonActiveStyle = {
   color:'#0036bb',
   backgroundColor:'#ffffff',
   position: 'absolute',
-  right: '3%',
-  top:'3%'
+  right: '1%',
+  top:'1%'
 }
 
 const buttonRestStyle = {
@@ -35,8 +35,8 @@ const buttonRestStyle = {
   backgroundColor:'#ffffff55',
   '&:hover':{color:'#0036bb',backgroundColor:'#ffffff'},
   position: 'absolute',
-  right: '3%',
-  top:'3%'
+  right: '1%',
+  top:'1%'
 }
 
 export default function PanZoom({src,open,handleClose}) {
@@ -97,7 +97,7 @@ export default function PanZoom({src,open,handleClose}) {
       aria-describedby="modal-modal-description"
     >
       <Box ref={boxMeasure} sx={style} >
-      <Button ref={buttonRef} onClick={()=>{stopPZ();handleClose();}}
+        <Button ref={buttonRef} onClick={()=>{stopPZ();handleClose();}}
               variant="conained"
               sx={buttonActive?buttonActiveStyle:buttonRestStyle}
                 ><CloseIcon/></Button>
