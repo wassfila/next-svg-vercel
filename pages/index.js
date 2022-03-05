@@ -1,6 +1,5 @@
 import Head from 'next/head'
-import PanZoomSVG from '../components/PanZoomSVG'
-import {useState} from 'react';
+import PanZoomGrid from '../components/PanZoomGrid'
 
 const svg_list =[
   'Linux_kernel_map.svg',
@@ -11,7 +10,6 @@ const svg_list =[
 ]
 
 export default function PanZoom() {
-  const [loaded, setLoaded] = useState(false)
 
   return (
     <>
@@ -19,9 +17,7 @@ export default function PanZoom() {
       <title>Pan Zoom</title>
       <link rel="icon" href="/favicon.ico" />
       </Head>
-      {svg_list.map((file,index)=>
-        <PanZoomSVG key={index} src={file}/>
-      )}
+      <PanZoomGrid list={svg_list} thumbnails={true}/>
     </>
   )
 }

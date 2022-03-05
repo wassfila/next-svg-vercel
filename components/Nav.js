@@ -6,20 +6,7 @@ import Typography from '@mui/material/Typography';
 import Link from 'next/link'
 
 const pages = [
-    {'name':'home'    ,'href':''},
-    {'name':'import'    ,'href':'import'},
-    {'name':'image'    ,'href':'image'},
-    {'name':'object'    ,'href':'object'},
-    {'name':'embed'    ,'href':'embed'},
-    //{'name':'fitted'    ,'href':'panzoom/fitted'},
-    //{'name':'boxed'     ,'href':'panzoom/boxed'},
-    //{'name':'panzoom'   ,'href':'panzoom/panzoom'},
-    //{'name':'img'       ,'href':'panzoom/img'},
-    {'name':'s_tiger'     ,'href':'svgpanzoom/tiger'},
-    //{'name':'s_zoom'     ,'href':'svgpanzoom/svg'},
-    //{'name':'r_simple','href':'rsvg/simple'},
-    //{'name':'r_tiger' ,'href':'rsvg/tiger'},
-    //{'name':'r_auto'  ,'href':'rsvg/auto'}
+    {'name':'home'    ,'href':''}
 ]
 
 
