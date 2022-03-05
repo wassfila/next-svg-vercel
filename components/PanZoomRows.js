@@ -25,17 +25,23 @@ function useWindowSize() {
   return windowSize;
 }
 
-function srcset(image, size, rows = 1, cols = 1) {
+function srcset_size(image, size, rows = 1, cols = 1) {
   return {
     src: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format`,
-    srcSet: `${image}?w=${size * cols}&h=${
-      size * rows
-    }&fit=crop&auto=format&dpr=2 2x`,
+    srcSet: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format&dpr=2 2x`,
   };
 }
 
+function srcset(image) {
+  return {
+    src: `${image}?fit=crop&auto=format`,
+    srcSet: `${image}?fit=crop&auto=format&dpr=2 2x`,
+  };
+}
+
+
 export default function PanZoomList({list,thumbnails=false}) {
-  const thumb_width = 300
+  const thumb_width = 150
   const [nbcols,setNbCols] = useState(3)
   const size = useWindowSize();
 
@@ -51,56 +57,34 @@ export default function PanZoomList({list,thumbnails=false}) {
   let thumb_list = []
   if(thumbnails){
     thumb_list = list.map((item)=>({
-      thumb:item.replace('.svg','.thumb.png'),
-      href:`pz-${item}`,
-      name:item.replace('.svg','')
+      thumb:item.file.replace('.svg','.thumb.png'),
+      href:`pz-${item.file}`,
+      name:item.file.replace('.svg',''),
+      rows:item.rows,
+      cols:item.cols,
     }))
   }
   return (
     <>
       {thumbnails &&
         <Box ref={boxRef}>
-        <ImageList variant="masonry" cols={nbcols} gap={8} sx={{ minWidth:600 }}>
+        <ImageList variant="quilted" cols={nbcols} gap={8} sx={{ minWidth:2*thumb_width }}>
             {thumb_list.map((item,index) => (
-            <Box key={index} m={1}>
-              <Paper >
-                <ImageListItem >
+                <ImageListItem key={index} rows={item.rows || 1} cols={item.cols || 1} sx={{border:1}}>
                 <img width={thumb_width}
-                  {...srcset(item.thumb, 300, 1, 1)}
+                  {...srcset(item.thumb)}
                   alt={item.href}
                   loading="lazy"
                   onClick={()=>{document.getElementById(`pz-fs-${item.name}.svg`).click()}}
                   style={{cursor:"zoom-in"}}
                 />
-                <ImageListItemBar 
-                  position="below"
-                />
-                  <Stack
-                      direction="row"
-                      spacing={2}
-                      alignItems="center"
-                      justifyContent="space-between"
-                    >
-                      <Typography variant="h6" component="div" ml={2} sx={{ flexGrow: 1 }}>
-                                        {item.name}
-                      </Typography>
-                      <IconButton
-                        sx={{ color: 'black' }}
-                        aria-label={`star ${item.title}`}
-                        href={`#${item.href}`}
-                      >
-                        <KeyboardArrowDownIcon />
-                      </IconButton>
-                  </Stack>  
                 </ImageListItem>
-              </Paper>
-            </Box>
           ))}
         </ImageList>
       </Box>
     }
-      {list.map((file,index)=>
-        <PanZoomSVG key={index} src={file}/>
+      {list.map((item,index)=>
+        <PanZoomSVG key={index} src={item.file}/>
       )}
     </>
   )

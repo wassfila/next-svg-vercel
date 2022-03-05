@@ -48,7 +48,7 @@ export default function PanZoom({src}) {
     if(loaded && divRef.current && !started.current){
       panzoomRef.current = panzoom(divRef.current, zoomOptions);
       started.current = true
-      console.log("pan zoom : created")
+      //console.log("pan zoom : created")
     }
   }
   function stopPZ(){
@@ -56,7 +56,7 @@ export default function PanZoom({src}) {
     if((started.current) && (panzoomRef.current)){
       panzoomRef.current.dispose();
       started.current = false
-      console.log(`pan zoom : disposed`)
+      //console.log(`pan zoom : disposed`)
     }
   }
   
@@ -65,6 +65,9 @@ export default function PanZoom({src}) {
       //console.log("adding listener")
       boxRef.current.addEventListener("mousedown", onMouseDown,true)
       boxRef.current.addEventListener("focusout", onFocusOut)
+      startPZ()
+      utl.Fit(panzoomRef.current,divRef.current,boxRef.current)
+      stopPZ()
     }
     return onComponentUnmount
   }, [loaded]);

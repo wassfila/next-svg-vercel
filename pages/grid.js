@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import PanZoomList from '../components/PanZoomList'
+import PanZoomGrid from '../components/PanZoomGrid'
 
 const svg_list =[
   'Linux_kernel_map.svg',
@@ -18,7 +18,7 @@ export default function PanZoom() {
       <title>Pan Zoom</title>
       <link rel="icon" href="/favicon.ico" />
       </Head>
-      <PanZoomList list={svg_list} thumbnails={true}/>
+      <PanZoomGrid list={svg_list} thumbnails={true}/>
     </>
   )
 }

@@ -51,22 +51,24 @@ export default function PanZoomList({list,thumbnails=false}) {
   let thumb_list = []
   if(thumbnails){
     thumb_list = list.map((item)=>({
-      thumb:item.replace('.svg','.thumb.png'),
-      href:`pz-${item}`,
-      name:item.replace('.svg','')
+      thumb:item.file.replace('.svg','.thumb.png'),
+      href:`pz-${item.file}`,
+      name:item.file.replace('.svg',''),
+      rows:item.rows,
+      cols:item.cols,
     }))
   }
   return (
     <>
       {thumbnails &&
         <Box ref={boxRef}>
-        <ImageList variant="masonry" cols={nbcols} gap={8} sx={{ minWidth:600 }}>
+        <ImageList variant="quilted" cols={nbcols} gap={8} sx={{ minWidth:600 }}>
             {thumb_list.map((item,index) => (
             <Box key={index} m={1}>
               <Paper >
-                <ImageListItem >
+                <ImageListItem rows={item.rows || 1} cols={item.cols || 1}>
                 <img width={thumb_width}
-                  {...srcset(item.thumb, 300, 1, 1)}
+                  {...srcset(item.thumb, 300, item.rows, item.cols)}
                   alt={item.href}
                   loading="lazy"
                   onClick={()=>{document.getElementById(`pz-fs-${item.name}.svg`).click()}}
@@ -99,8 +101,8 @@ export default function PanZoomList({list,thumbnails=false}) {
         </ImageList>
       </Box>
     }
-      {list.map((file,index)=>
-        <PanZoomSVG key={index} src={file}/>
+      {list.map((item,index)=>
+        <PanZoomSVG key={index} src={item.file}/>
       )}
     </>
   )

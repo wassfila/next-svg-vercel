@@ -6,7 +6,9 @@ import Typography from '@mui/material/Typography';
 import Link from 'next/link'
 
 const pages = [
-    {'name':'home'    ,'href':''}
+    {'name':'List'    ,'href':''},
+    {'name':'Grid'    ,'href':'grid'},
+    {'name':'Rows'    ,'href':'rows'},
 ]
 
 
