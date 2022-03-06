@@ -5,30 +5,39 @@ app : https://next-svg-vercel.vercel.app/
 
 deployment repo : https://github.com/wassfila/next-svg-vercel
 # Spec
+## loading
 * svg loaded dynamically from json input filenames
+* all svg of the entire page should be loaded at once (no lazy intersection loading) so that a text search can be performed on the entire page elements
+## mouse
 * panzoom object is disabled by default to allow window wheel vertical scroll
 * cursor `grab` is always shown over the images to show the interaction possibility
-* panzoom is only activated on user interaction after first mouse down
-* first mouse down can be continued to pan the image
+* panzoom effect is run on startup on every image to fit it entirely then deactivated (this is important because otherwise a text search would hit while the actual text would not be visible)
+* panzoom is activated on user interaction after mouse down
+* the mouse down can be continued to pan the image
+## focus
 * activation is show with a focus effect using a Paper with higher shadow and border solid style
 * focus is lost from `focusout` event and deactivates the panzoom leaving the images in its position
 * loss of focus and deactivation allows the user to use the wheel mouse for vertical scrolling again
+## actions
 * fit button allow to adjust the image in the viewing area, fitting width or height depending on the ratio
 * a new reactivation after stop will reset the image position
+## modal
 * Modal button open a full window Modal fitted image with active panzoom
 * Modal is not 100% on width and height but a small percentage of darkened are is left
   * Modal exit with click away ondark area
   * Modal exit with X button that fades a bit after 2
   * Modal exit with keyboard key
+## gallery
+* a list of files is passed as parameter to a component
+* an image thumbnail is generated for every svg file
+* the gallery number of columns is responsive to the window size
+* the gallery card are adjusted with a `Masonry` Effect
+* every gallery card has a zoom cursor on the thumbnail that opens a Modal of the full sized image
+* every gallery card shows the title and a link to smooth scroll down to the original item on the page
 
-## decisions
-* it is accepted to rely on javascript dynamic loading of svg instead of the `embed` or `object` due to the limitation of panzoom lib of not acting on shadow svg documents
-* it is accepted that images are not adjusted by default and css styling and svg properties are used to define the default adjustment e.g. without `width=900px`
-* mouse leave cannot be used to deactivate the panzoom due to the activation limitation orresetting the image
-* an alert popover hint about the possibility of panzoom in addition to the grab cursor is not necessary and might be annoying to frequent users
 
 ## TODOs
-* keep panzoom coordinate when regaining the focus
+* retreive panzoom coordinate when regaining the focus
 * deep linking
 * top on svg with `width=800px` not working
 * handle images not SVGs only
@@ -37,6 +46,7 @@ deployment repo : https://github.com/wassfila/next-svg-vercel
 * in Chrome touch generates : "Intervention unable to preventdefault inside passive event"
 * timeout of 1 ms needed for second Modal open otherwise svg is undefined
 * focusout not reliable
+* panzoom lib cannot act on shadow svg documents therefore it is accepted to rely on javascript dynamic loading of svg instead of the `embed` or `object`
 # Code description
 ## working sample
 * `inline.js` : using `panzoom` and `react-inlinesvg`.

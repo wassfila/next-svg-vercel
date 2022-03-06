@@ -8,6 +8,14 @@ const svg_list =[
   'tiger.svg',
   'vintage-flourish-divider-7.svg',
   'nRF52.svg',
+  'vintage-flourish-divider-7.svg',
+  'nRF52.svg',
+  'tiger.svg',
+  'long_diag.svg',
+  'vintage-flourish-divider-7.svg',
+  'nRF52.svg',
+  'tiger.svg',
+  'long_diag.svg',
 ]
 
 export default function PanZoom() {

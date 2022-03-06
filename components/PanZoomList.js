@@ -4,6 +4,8 @@ import {Box, Paper, ImageList,ImageListItem,ImageListItemBar,
   IconButton,Stack,Typography,Button,ListSubheader  } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import LinkIcon from '@mui/icons-material/Link';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
 //https://usehooks.com/useWindowSize/
 function useWindowSize() {
@@ -28,21 +30,22 @@ function useWindowSize() {
 function srcset(image, size, rows = 1, cols = 1) {
   return {
     src: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format`,
-    srcSet: `${image}?w=${size * cols}&h=${
-      size * rows
-    }&fit=crop&auto=format&dpr=2 2x`,
+    srcSet: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format&dpr=2 2x`,
   };
 }
 
-export default function PanZoomList({list,thumbnails=false}) {
-  const thumb_width = 300
+export default function PanZoomList({list,thumbnails=false,thumb_width=200}) {
   const [nbcols,setNbCols] = useState(3)
   const size = useWindowSize();
 
   const boxRef = useCallback(node=>{
     if(node != null){
-      let nb_cols = Math.ceil(node.clientWidth / thumb_width)
-      console.log(`nb cols = ${nb_cols}`)
+      let col_width = thumb_width + 16      //+ImageList.gap + Box.padding
+      let cwidth = node.clientWidth - 2 * 8 // minus padding
+      let nb_cols = Math.floor(cwidth / col_width)
+      //if(nb_cols>1){nb_cols-=1}
+      //if(nb_cols>5){nb_cols=5}
+      console.log(`clientw:${node.clientWidth} ; nb cols = ${nb_cols}`)
       setNbCols(nb_cols)
     }
     },[size]);
@@ -59,29 +62,31 @@ export default function PanZoomList({list,thumbnails=false}) {
   return (
     <>
       {thumbnails &&
-        <Box ref={boxRef}>
-        <ImageList variant="masonry" cols={nbcols} gap={8} sx={{ minWidth:600 }}>
+        <Box ref={boxRef} sx={{backgroundColor:"#e1eaf2",minWidth:(thumb_width+16)*2+16 }} p={1}>
+        <ImageList variant="masonry" cols={nbcols} gap={4} sx={{ minWidth:(thumb_width+16)*2 }}>
             {thumb_list.map((item,index) => (
-            <Box key={index} m={1}>
+                <ImageListItem key={index} >
+            <Box mb={1} >
               <Paper >
-                <ImageListItem >
-                <img width={thumb_width}
-                  {...srcset(item.thumb, 300, 1, 1)}
-                  alt={item.href}
-                  loading="lazy"
-                  onClick={()=>{document.getElementById(`pz-fs-${item.name}.svg`).click()}}
-                  style={{cursor:"zoom-in"}}
-                />
-                <ImageListItemBar 
-                  position="below"
-                />
+              <Stack
+                    direction="column"
+                    alignItems="center"
+                  >
+                    <Box p={1}>
+                      <img width={thumb_width}
+                        src={item.thumb}
+                        alt={item.href}
+                        onClick={()=>{document.getElementById(`pz-fs-${item.name}.svg`).click()}}
+                        style={{cursor:"zoom-in"}}
+                      />
+                    </Box>
+                  </Stack>
                   <Stack
                       direction="row"
-                      spacing={2}
                       alignItems="center"
                       justifyContent="space-between"
                     >
-                      <Typography variant="h6" component="div" ml={2} sx={{ flexGrow: 1 }}>
+                      <Typography component="div" ml={2} sx={{ flexGrow: 1, maxWidth:120 }}>
                                         {item.name}
                       </Typography>
                       <IconButton
@@ -89,12 +94,12 @@ export default function PanZoomList({list,thumbnails=false}) {
                         aria-label={`star ${item.title}`}
                         href={`#${item.href}`}
                       >
-                        <KeyboardArrowDownIcon />
+                        <LinkIcon/>
                       </IconButton>
                   </Stack>  
-                </ImageListItem>
-              </Paper>
+                  </Paper>
             </Box>
+                </ImageListItem>
           ))}
         </ImageList>
       </Box>

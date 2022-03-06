@@ -41,7 +41,7 @@ function srcset(image) {
 
 
 export default function PanZoomList({list,thumbnails=false}) {
-  const thumb_width = 150
+  const thumb_width = 200
   const [nbcols,setNbCols] = useState(3)
   const size = useWindowSize();
 
@@ -67,11 +67,11 @@ export default function PanZoomList({list,thumbnails=false}) {
   return (
     <>
       {thumbnails &&
-        <Box ref={boxRef}>
+        <Box ref={boxRef} sx={{backgroundColor:"#e1eaf2"}} p={1}>
         <ImageList variant="quilted" cols={nbcols} gap={8} sx={{ minWidth:2*thumb_width }}>
             {thumb_list.map((item,index) => (
                 <ImageListItem key={index} rows={item.rows || 1} cols={item.cols || 1} sx={{border:1}}>
-                <img width={thumb_width}
+                <img 
                   {...srcset(item.thumb)}
                   alt={item.href}
                   loading="lazy"
