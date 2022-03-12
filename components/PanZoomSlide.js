@@ -12,13 +12,13 @@ import FitScreenIcon from '@mui/icons-material/FitScreen';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import WidthIcon from '../public/width.svg'
 
-export default function PanZoom({src}) {
+export default function PanZoomSlide({src,menu=false,height=400}) {
   const started = useRef(false)
   const [focus, setFocus] = useState(false)
   const [loaded, setLoaded] = useState(false)
   const [open, setOpen] = useState(false);
 
-  const boxHeight = 400
+  const boxHeight = height
   const zoomOptions = {minZoom: 0.1, maxZoom:4}
   const boxRef = useRef(null);
   const divRef = useRef(null);
@@ -65,14 +65,17 @@ export default function PanZoom({src}) {
       //console.log("adding listener")
       boxRef.current.addEventListener("mousedown", onMouseDown,true)
       boxRef.current.addEventListener("focusout", onFocusOut)
-      startPZ()
-      utl.Fit(panzoomRef.current,divRef.current,boxRef.current)
-      stopPZ()
+      let svg = document.getElementById(src)
+      if(svg != null){
+        startPZ()
+        utl.Fit(src,panzoomRef.current,boxRef.current)
+        stopPZ()
+      }
     }
     return onComponentUnmount
   }, [loaded]);
-  function TestSVGjs(e){
-    let svg = divRef.current.getElementsByTagName('svg')[0]
+  function TestSVGjs(src){
+    let svg = document.getElementById(src)
     if(svg){
       let draw = SVGjs(svg)
       draw.rect(100, 100).fill('#f06')
@@ -83,31 +86,35 @@ export default function PanZoom({src}) {
     }
   }
   return (
-    <Stack id={`pz-${src}`} ref={stackRef} mt={1}>
-    <Stack
-        direction="row"
-        divider={<Divider orientation="vertical" flexItem />}
-        spacing={2}
-        justifyContent="center"
-    >
-        <Button onClick={()=>{onMouseDown();utl.Fit(panzoomRef.current,divRef.current,boxRef.current)}}
-                variant="text"><FitScreenIcon/> fit</Button>
-        <Button onClick={()=>{onMouseDown();utl.Top(panzoomRef.current,divRef.current,boxRef.current)}}
-                variant="text"><WidthIcon/></Button>
-        <Button onClick={TestSVGjs} variant="text"><EditIcon/></Button>
-        <Button onClick={()=>{setOpen(true)}} variant="text" id={`pz-fs-${src}`}><FullscreenIcon/></Button>
-    </Stack>
-    <Box id="mainContent" m={1} sx={{border: focus?'2px solid':'0px',cursor:'grab'}}>
+    <>
+    <Box id="mainContent" m={1} sx={{width:boxHeight*2, border: focus?'2px solid':'0px',cursor:'grab'}}>
       <Paper elevation={focus?10:2}>
+        <Stack  id={`pz-${src}`} ref={stackRef}>
+        {menu&&
+          <Stack
+          direction="row"
+          divider={<Divider orientation="vertical" flexItem />}
+          spacing={2}
+          justifyContent="center"
+          >
+          <Button onClick={()=>{onMouseDown();utl.Fit(src,panzoomRef.current,boxRef.current)}}
+                  variant="text"><FitScreenIcon/> fit</Button>
+          <Button onClick={()=>{onMouseDown();utl.Top(src,panzoomRef.current,boxRef.current)}}
+                  variant="text"><WidthIcon/></Button>
+          <Button onClick={()=>{TestSVGjs(src)}} variant="text"><EditIcon/></Button>
+          <Button onClick={()=>{setOpen(true)}} variant="text" id={`pz-fs-${src}`}><FullscreenIcon/></Button>
+        </Stack>
+        }
             <Box ref={boxRef} 
                  sx={{  height:boxHeight, overflow: 'hidden'}}>
                 <div ref={divRef} >
-                  <SVG src={src} onLoad={()=>{setLoaded(true)}} />
+                  <SVG src={src} id={src} onLoad={()=>{setLoaded(true)}} />
                 </div>
             </Box>
+            </Stack>
         </Paper>
     </Box>
     <PanZoomModal src={src} open={open} handleClose={()=>{setOpen(false)}}/>
-    </Stack>
+    </>
   )
 }

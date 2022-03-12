@@ -68,12 +68,12 @@ export default function PanZoom({src,open,handleClose}) {
       setTimeout(()=>{setButtonActive(false)},2000)
       let svg = divRef.current.getElementsByTagName('svg')[0]
       if(svg){
-        utl.Fit(panzoomRef.current,divRef.current,boxRef.current)
+        utl.Fit(src,panzoomRef.current,boxRef.current)
         console.log("Modal pan zoom : created")
       }else{
         //TODO not clear why this timeout is needed, the svg is underfined otherwise
         setTimeout(()=>{
-          utl.Fit(panzoomRef.current,divRef.current,boxRef.current)
+          utl.Fit(src,panzoomRef.current,boxRef.current)
           console.log("Modal pan zoom : created fitted after delay")
         },1)
       }

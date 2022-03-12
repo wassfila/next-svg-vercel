@@ -1,11 +1,11 @@
 import { useCallback, useState, useEffect} from 'react';
-import PanZoomSVG from '../components/PanZoomSVG'
-import {Box, Paper, ImageList,ImageListItem,ImageListItemBar,
-  IconButton,Stack,Typography,Button,ListSubheader  } from '@mui/material';
-import InfoIcon from '@mui/icons-material/Info';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import LinkIcon from '@mui/icons-material/Link';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import PanZoomSlide from '../components/PanZoomSlide'
+import PanZoomThumb from '../components/PanZoomThumb'
+import {Box, ImageList,ImageListItem,Grid,
+  Typography,Accordion,AccordionSummary,AccordionDetails  } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import BurstModeIcon from '@mui/icons-material/BurstMode';
+import ImageIcon from '@mui/icons-material/Image';
 
 //https://usehooks.com/useWindowSize/
 function useWindowSize() {
@@ -27,14 +27,8 @@ function useWindowSize() {
   return windowSize;
 }
 
-function srcset(image, size, rows = 1, cols = 1) {
-  return {
-    src: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format`,
-    srcSet: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format&dpr=2 2x`,
-  };
-}
-
-export default function PanZoomList({list,thumbnails=false,thumb_width=200}) {
+export default function PanZoomList({list,thumbnails=false,thumb_width=200,slides=false,default_expanded=false}) {
+  const [expanded,setExpanded] = useState(default_expanded)
   const [nbcols,setNbCols] = useState(3)
   const size = useWindowSize();
 
@@ -54,59 +48,49 @@ export default function PanZoomList({list,thumbnails=false,thumb_width=200}) {
   let thumb_list = []
   if(thumbnails){
     thumb_list = list.map((item)=>({
+      src:item,
       thumb:item.replace('.svg','.thumb.png'),
       href:`pz-${item}`,
       name:item.replace('.svg','')
     }))
   }
   return (
-    <>
+    <Box mb={2}>
       {thumbnails &&
-        <Box ref={boxRef} sx={{backgroundColor:"#e1eaf2",minWidth:(thumb_width+16)*2+16 }} p={1}>
-        <ImageList variant="masonry" cols={nbcols} gap={4} sx={{ minWidth:(thumb_width+16)*2 }}>
-            {thumb_list.map((item,index) => (
-                <ImageListItem key={index} >
-            <Box mb={1} >
-              <Paper >
-              <Stack
-                    direction="column"
-                    alignItems="center"
-                  >
-                    <Box p={1}>
-                      <img width={thumb_width}
-                        src={item.thumb}
-                        alt={item.href}
-                        onClick={()=>{document.getElementById(`pz-fs-${item.name}.svg`).click()}}
-                        style={{cursor:"zoom-in"}}
-                      />
-                    </Box>
-                  </Stack>
-                  <Stack
-                      direction="row"
-                      alignItems="center"
-                      justifyContent="space-between"
-                    >
-                      <Typography component="div" ml={2} sx={{ flexGrow: 1, maxWidth:120 }}>
-                                        {item.name}
-                      </Typography>
-                      <IconButton
-                        sx={{ color: 'black' }}
-                        aria-label={`star ${item.title}`}
-                        href={`#${item.href}`}
-                      >
-                        <LinkIcon/>
-                      </IconButton>
-                  </Stack>  
-                  </Paper>
-            </Box>
-                </ImageListItem>
-          ))}
-        </ImageList>
-      </Box>
-    }
-      {list.map((file,index)=>
-        <PanZoomSVG key={index} src={file}/>
-      )}
-    </>
+        <Accordion 
+          sx={{backgroundColor:"#bac9d6"}} 
+          expanded={expanded}
+          onChange={(e,exp)=>{console.log(exp);setExpanded(exp)}}>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <BurstModeIcon/>
+          <Typography ml={1}>{expanded?"Click to close...":"Click to expand..."}</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Box ref={boxRef} sx={{backgroundColor:"#e1eaf2",minWidth:(thumb_width+16)*2+16 }} p={1}>
+            <ImageList variant="masonry" cols={nbcols} gap={4} sx={{ minWidth:(thumb_width+16)*2 }}>
+                {thumb_list.map((item,index) => (
+                    <ImageListItem key={index} >
+                      <PanZoomThumb item={item} thumb_width={thumb_width}/>
+                    </ImageListItem>
+              ))}
+            </ImageList>
+          </Box>
+        </AccordionDetails>
+        </Accordion>
+      }
+      {slides &&
+        <Grid container spacing={{ xs: 2, md: 3 }} alignItems="center" justifyContent="space-evenly">
+          {list.map((file,index)=>
+            <Grid item key={index} xs={2} sx={{minWidth:400}}>
+              <PanZoomSlide src={file} height={200} />
+            </Grid>
+          )}
+        </Grid>
+      }
+    </Box>
   )
 }

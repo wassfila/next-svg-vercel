@@ -1,4 +1,4 @@
-import PanZoomSVG from '../components/PanZoomSVG'
+import PanZoomSlide from '../components/PanZoomSlide'
 import {Paper, Box, Grid, Stack, Divider,
         IconButton,Button,ListSubheader, Typography  } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
@@ -62,7 +62,7 @@ export default function PanZoomGrid({list,thumbnails=false,thumb_width=200}) {
       </Box>
     }
       {list.map((file,index)=>
-        <PanZoomSVG key={index} src={file}/>
+        <PanZoomSlide key={index} src={file}/>
       )}
     </>
   )

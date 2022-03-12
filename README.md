@@ -37,6 +37,8 @@ deployment repo : https://github.com/wassfila/next-svg-vercel
 
 
 ## TODOs
+* optional slides view
+* adjustable slides size
 * retreive panzoom coordinate when regaining the focus
 * deep linking
 * top on svg with `width=800px` not working

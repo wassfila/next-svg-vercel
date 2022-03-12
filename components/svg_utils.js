@@ -1,7 +1,7 @@
 import panzoom from 'panzoom';
 
-function get_svg_size(divRef){
-  let svg = divRef.getElementsByTagName('svg')[0]
+function get_svg_size(src){
+  let svg = document.getElementById(src)
   let bbox = svg.getBBox();
   return {svg_width:bbox.width,svg_height:bbox.height}
 }
@@ -19,13 +19,13 @@ function Reset(pzRef,divRef,zoomOptions){
   return panzoom(divRef, zoomOptions);
 }
 
-function Center(pzRef,divRef,boxRef){
+function Center(src,pzRef,boxRef){
   if(! pzRef) return null
   //pzRef = Reset(pzRef,divRef,zoomOptions)
   softReset(pzRef)
-  let svg = divRef.getElementsByTagName('svg')[0]
+  let svg = document.getElementById(src)
   //let cbox = svg.getBoundingClientRect();
-  let {svg_width, svg_height} = get_svg_size(divRef)
+  let {svg_width, svg_height} = get_svg_size(src)
   let scale = boxRef.clientWidth / svg_width
   if(svg.hasAttributeNS(null,"width")){
     let client_width = svg.getAttributeNS(null,"width")
@@ -41,12 +41,12 @@ function Center(pzRef,divRef,boxRef){
   return
 }
 
-function FitHeight(pzRef,divRef,boxRef){
+function FitHeight(src,pzRef,boxRef){
   if(! pzRef) return
   softReset(pzRef)
-  let svg = divRef.getElementsByTagName('svg')[0]
+  let svg = document.getElementById(src)
   //let cbox = svg.getBoundingClientRect();
-  let {svg_width, svg_height} = get_svg_size(divRef)
+  let {svg_width, svg_height} = get_svg_size(src)
   let scale = boxRef.clientWidth / svg_width
   if(svg.hasAttributeNS(null,"width")){
     let client_width = svg.getAttributeNS(null,"width")
@@ -68,12 +68,12 @@ function FitHeight(pzRef,divRef,boxRef){
   pzRef.zoomAbs(zoomX, zoomY, fit_height_zoom);
   //console.log(`zoomAbs (${zoomX},${zoomY},${fit_height_zoom})`)
 }
-function FitWidth(pzRef,divRef,boxRef){
+function FitWidth(src,pzRef,boxRef){
   if(! pzRef) return
   softReset(pzRef)
-  let svg = divRef.getElementsByTagName('svg')[0]
+  let svg = document.getElementById(src)
   //let cbox = svg.getBoundingClientRect();
-  let {svg_width, svg_height} = get_svg_size(divRef)
+  let {svg_width, svg_height} = get_svg_size(src)
   let scale = boxRef.clientWidth / svg_width
   if(svg.hasAttributeNS(null,"width")){
     let client_width = svg.getAttributeNS(null,"width")
@@ -95,23 +95,23 @@ function FitWidth(pzRef,divRef,boxRef){
   pzRef.zoomAbs(zoomX, zoomY, fit_width_zoom);
 }
 
-function Fit(pzRef,divRef,boxRef){
+function Fit(src,pzRef,boxRef){
   if(! pzRef) return
-  let {svg_width, svg_height} = get_svg_size(divRef)
+  let {svg_width, svg_height} = get_svg_size(src)
   let svg_ratio = svg_width / svg_height
   let box_ratio = boxRef.clientWidth / boxRef.clientHeight
   if(svg_ratio > box_ratio){
-    FitWidth(pzRef,divRef,boxRef)
+    FitWidth(src,pzRef,boxRef)
   }else{
-    FitHeight(pzRef,divRef,boxRef)
+    FitHeight(src,pzRef,boxRef)
   }
 }
-function Top(pzRef,divRef,boxRef){
+function Top(src,pzRef,boxRef){
   if(! pzRef) return
   softReset(pzRef)
-  let svg = divRef.getElementsByTagName('svg')[0]
+  let svg = document.getElementById(src)
   //let cbox = svg.getBoundingClientRect();
-  let {svg_width, svg_height} = get_svg_size(divRef)
+  let {svg_width, svg_height} = get_svg_size(src)
   let scale = boxRef.clientWidth / svg_width
   if(svg.hasAttributeNS(null,"width")){
     let client_width = svg.getAttributeNS(null,"width")
