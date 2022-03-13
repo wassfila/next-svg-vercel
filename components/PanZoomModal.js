@@ -49,6 +49,7 @@ export default function PanZoom({src,open,handleClose}) {
   const boxRef = useRef(null);
   const divRef = useRef(null);
   const buttonRef = useRef(null);
+  const modal_src = `modal-${src}`
 
   const divMeasure = useCallback(node=>{
     divRef.current = node
@@ -66,14 +67,14 @@ export default function PanZoom({src,open,handleClose}) {
       started.current=true
       setButtonActive(true)
       setTimeout(()=>{setButtonActive(false)},2000)
-      let svg = divRef.current.getElementsByTagName('svg')[0]
+      let svg = document.getElementById(modal_src)
       if(svg){
-        utl.Fit(src,panzoomRef.current,boxRef.current)
+        utl.Fit(modal_src,panzoomRef.current,boxRef.current)
         console.log("Modal pan zoom : created")
       }else{
         //TODO not clear why this timeout is needed, the svg is underfined otherwise
         setTimeout(()=>{
-          utl.Fit(src,panzoomRef.current,boxRef.current)
+          utl.Fit(modal_src,panzoomRef.current,boxRef.current)
           console.log("Modal pan zoom : created fitted after delay")
         },1)
       }
@@ -102,7 +103,7 @@ export default function PanZoom({src,open,handleClose}) {
               sx={buttonActive?buttonActiveStyle:buttonRestStyle}
                 ><CloseIcon/></Button>
         <div ref={divMeasure}>
-          <SVG src={src} onLoad={()=>{setLoaded(true)}}/>
+          <SVG src={src} id={modal_src} onLoad={()=>{setLoaded(true)}}/>
         </div>
         </Box>
     </Modal>

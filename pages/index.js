@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import PanZoomList from '../components/PanZoomList'
+import SlidesList from '../components/SlidesList'
 import {Typography  } from '@mui/material';
 
 const description = `This example shows how to create a list of interactive Slides out of an svg images files list`
@@ -32,7 +32,7 @@ export default function PanZoom() {
       <link rel="icon" href="/favicon.ico" />
       </Head>
       <Typography p={1}>{description}</Typography>
-      <PanZoomList list={svg_list} slides/>
+      <SlidesList list={svg_list}/>
     </>
   )
 }

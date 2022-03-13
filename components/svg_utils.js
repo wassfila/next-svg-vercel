@@ -97,6 +97,7 @@ function FitWidth(src,pzRef,boxRef){
 
 function Fit(src,pzRef,boxRef){
   if(! pzRef) return
+  //console.log("running fit")
   let {svg_width, svg_height} = get_svg_size(src)
   let svg_ratio = svg_width / svg_height
   let box_ratio = boxRef.clientWidth / boxRef.clientHeight

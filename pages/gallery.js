@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import PanZoomList from '../components/PanZoomList'
+import Gallery from '../components/Gallery'
 import {Typography,Box  } from '@mui/material';
 import Tiger from '../public/tiger.svg'
 import Diagram from '../public/long_diag.svg'
@@ -37,7 +37,7 @@ export default function PanZoom() {
       <link rel="icon" href="/favicon.ico" />
       </Head>
       <Typography p={1}>{description}</Typography>
-      <PanZoomList list={svg_list} thumbnails default_expanded/>
+      <Gallery list={svg_list} default_expanded/>
       <Tiger id="pz-tiger2.svg"/>
       <Diagram id="pz-long_diag.svg"/>
     </>
