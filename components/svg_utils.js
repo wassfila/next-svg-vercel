@@ -1,4 +1,5 @@
 import panzoom from 'panzoom';
+import { SVG as SVGjs } from '@svgdotjs/svg.js'
 
 function get_svg_size(src){
   let svg = document.getElementById(src)
@@ -133,6 +134,44 @@ function Top(src,pzRef,boxRef){
   let zoomY           = boxRef.clientHeight/2
   pzRef.zoomAbs(zoomX, zoomY, fit_width_zoom);
 }
+
+async function get_link_list(json_filename){
+  const response = await fetch(json_filename)
+  return await response.json()
+}
+
+function setup_links(svg_id,json_filename,text_list){
+  get_link_list(json_filename).then((json_data)=>{
+      let svg = document.getElementById(svg_id)
+      if(svg){
+        let draw = SVGjs(svg)
+        let text_nodes = draw.find('text')
+        let text_array = [ ...text_nodes ];
+        text_array.forEach((text)=>{
+          const key = text.node.innerHTML
+          if(key in json_data){
+            //text.linkTo(json_data[key])//link in same page
+            text.linkTo((link)=>{link.to(json_data[key]).target('_blank')})//link in new page
+            text.css({'text-decoration': 'underline'})  
+            text_list.current.push(text)
+          }
+        })
+        //text.fill('#f06')
+      }
+    })
+    //flash_links(text_list.current,500)
+    return
+}
+
+function flash_links(text_list,duration){
+  text_list.forEach((text)=>{
+    text.fill({color:'red'})
+    setTimeout(()=>{
+      text.fill({color:'#05236e'})  
+    },duration)
+  })
+}
+
 export{
   Fit,
   Top,
@@ -140,5 +179,7 @@ export{
   Reset,
   Center,
   FitHeight,
-  FitWidth
+  FitWidth,
+  setup_links,
+  flash_links
 }
